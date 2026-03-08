@@ -1,65 +1,158 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useMemo, useState } from "react";
+
+type Heart = {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+};
+
+type Petal = {
+  id: number;
+  left: number;
+  delay: number;
+  duration: number;
+  scale: number;
+};
+
+export default function HomePage() {
+  const [opened, setOpened] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [hearts, setHearts] = useState<Heart[]>([]);
+
+  const petals = useMemo<Petal[]>(
+    () =>
+      Array.from({ length: 18 }, (_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        delay: Math.random() * 8,
+        duration: 8 + Math.random() * 8,
+        scale: 0.7 + Math.random() * 0.9,
+      })),
+    []
+  );
+
+  useEffect(() => {
+    if (!opened) return;
+
+    const timer = setTimeout(() => {
+      setShowMessage(true);
+    }, 900);
+
+    return () => clearTimeout(timer);
+  }, [opened]);
+
+  const createHeartBurst = () => {
+    const burst = Array.from({ length: 14 }, (_, i) => ({
+      id: Date.now() + i,
+      x: Math.random() * 260 - 130,
+      y: -(Math.random() * 220 + 40),
+      size: 14 + Math.random() * 18,
+    }));
+
+    setHearts((prev) => [...prev, ...burst]);
+
+    setTimeout(() => {
+      setHearts((prev) => prev.filter((heart) => !burst.some((b) => b.id === heart.id)));
+    }, 1600);
+  };
+
+  const handleOpen = () => {
+    if (opened) {
+      createHeartBurst();
+      return;
+    }
+
+    setOpened(true);
+    createHeartBurst();
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="page">
+      <div className="bg-glow bg-glow-1" />
+      <div className="bg-glow bg-glow-2" />
+
+      <div className="petal-layer" aria-hidden="true">
+        {petals.map((petal) => (
+          <span
+            key={petal.id}
+            className="petal"
+            style={
+              {
+                left: `${petal.left}%`,
+                animationDelay: `${petal.delay}s`,
+                animationDuration: `${petal.duration}s`,
+                transform: `scale(${petal.scale})`,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+      </div>
+
+      <section className="hero">
+        <p className="top-text">8 Mart Dünya Kadınlar Günü</p>
+
+        <h1 className="title">
+          Benim en güzel
+          <br />
+          kadınıma 🌸
+        </h1>
+
+        <p className="subtitle">
+          Hayatıma güzellik, zarafet ve neşe kattığın için teşekkür ederim.
+          İyi ki varsın, iyi ki benimlesin.
+        </p>
+
+        <div className="flower-wrap">
+          <button
+            type="button"
+            className={`flower-card ${opened ? "opened" : ""}`}
+            onClick={handleOpen}
+          >
+            <div className="flower-center" />
+
+            <span className="petal-shape petal-top" />
+            <span className="petal-shape petal-right" />
+            <span className="petal-shape petal-bottom" />
+            <span className="petal-shape petal-left" />
+            <span className="petal-shape petal-top-left" />
+            <span className="petal-shape petal-top-right" />
+            <span className="petal-shape petal-bottom-left" />
+            <span className="petal-shape petal-bottom-right" />
+
+            <span className="stem" />
+            <span className="leaf leaf-left" />
+            <span className="leaf leaf-right" />
+
+            {hearts.map((heart) => (
+              <span
+                key={heart.id}
+                className="burst-heart"
+                style={
+                  {
+                    "--x": `${heart.x}px`,
+                    "--y": `${heart.y}px`,
+                    width: `${heart.size}px`,
+                    height: `${heart.size}px`,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
+          </button>
+        </div>
+
+        <div className={`message-card ${showMessage ? "show" : ""}`}>
+          <p className="message-title">Kadınlar Günün Kutlu Olsun Aşkım 💖</p>
+          <p className="message-text">
+            Sen sadece sevgilim değil, aynı zamanda hayatımın en güzel çiçeğisin.
+            Gülüşün içimi bahar yapıyor, varlığın her günü güzelleştiriyor.
+            Hep mutlu ol, hep gül, çünkü sana en çok gülmek yakışıyor.
           </p>
+          <p className="signature">Seni çok seven birinden 🤍</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
