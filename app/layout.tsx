@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Dünya Kadınlar Günü | Aşkıma",
-  description: "Sevgilime özel romantik mini site",
+  title: "Aşkımdan Özür Diliyorum",
+  description: "Sevgilime özel hazırlanmış özür ve sevgi mini sitesi",
 };
 
 export default function RootLayout({

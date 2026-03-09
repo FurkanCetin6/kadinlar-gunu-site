@@ -55,7 +55,9 @@ export default function HomePage() {
     setHearts((prev) => [...prev, ...burst]);
 
     setTimeout(() => {
-      setHearts((prev) => prev.filter((heart) => !burst.some((b) => b.id === heart.id)));
+      setHearts((prev) =>
+        prev.filter((heart) => !burst.some((b) => b.id === heart.id))
+      );
     }, 1600);
   };
 
@@ -92,17 +94,18 @@ export default function HomePage() {
       </div>
 
       <section className="hero">
-        <p className="top-text">8 Mart Dünya Kadınlar Günü</p>
+        <p className="top-text">Sana Bir Şey Söylemek İstiyorum</p>
 
         <h1 className="title">
-          Benim en güzel
+          Aşkım,
           <br />
-          kadınıma 🌸
+          senden özür diliyorum 💔
         </h1>
 
         <p className="subtitle">
-          Hayatıma güzellik, zarafet ve neşe kattığın için teşekkür ederim.
-          İyi ki varsın, iyi ki benimlesin.
+          Seni üzdüğüm için gerçekten çok üzgünüm. Kalbini kırmak asla
+          isteyeceğim bir şey değildi. Bu küçük sayfa, sana ne kadar değer
+          verdiğimi ve seni ne kadar çok sevdiğimi anlatmak için.
         </p>
 
         <div className="flower-wrap">
@@ -144,13 +147,16 @@ export default function HomePage() {
         </div>
 
         <div className={`message-card ${showMessage ? "show" : ""}`}>
-          <p className="message-title">Kadınlar Günün Kutlu Olsun Aşkım 💖</p>
+          <p className="message-title">Lütfen Beni Affet Aşkım 🤍</p>
           <p className="message-text">
-            Sen sadece sevgilim değil, aynı zamanda hayatımın en güzel çiçeğisin.
-            Gülüşün içimi bahar yapıyor, varlığın her günü güzelleştiriyor.
-            Hep mutlu ol, hep gül, çünkü sana en çok gülmek yakışıyor.
+            Yaptığım şey için içtenlikle özür diliyorum. Seni kırdığım her an
+            için gerçekten pişmanım. Sen benim için çok değerlisin ve gülüşünü
+            solduracak hiçbir şey yapmak istemem. Keşke zamanı geri alabilsem,
+            ama alamıyorum. Yalnızca hatamı kabul edip kalbinden tekrar yer
+            isteyebiliyorum. Seni çok seviyorum ve telafi etmek için elimden
+            geleni yapacağım.
           </p>
-          <p className="signature">Seni çok seven birinden 🤍</p>
+          <p className="signature">Kalbi hep sende olan biri 🤍</p>
         </div>
       </section>
     </main>
